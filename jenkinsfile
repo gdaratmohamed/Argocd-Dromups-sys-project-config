@@ -1,0 +1,66 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_USERNAME = 'gdaratmohamed'
+        GIT_TOKEN_CREDENTIALS_ID = 'github-credentials'
+    }
+
+    stages {
+        stage('Clone repository') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Update Image Tags') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: GIT_TOKEN_CREDENTIALS_ID, passwordVariable: 'GIT_TOKEN')]) {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                            // Configuration Git
+                            sh """
+                                git config user.email "gdaratmohamed73@gmail.com"
+                                git config user.name "Gdarat Mohamed"
+                            """
+                            
+                            // Mise à jour du FRONTEND
+                            sh """
+                                echo "=== Mise à jour du frontend ==="
+                                cat frontend/deployment.yaml
+                                sed -i 's|gdaratmohamed/front-image:.*|gdaratmohamed/front-image:${DOCKERTAG}|g' frontend/deployment.yaml
+                                echo "=== Après modification ==="
+                                cat frontend/deployment.yaml
+                            """
+                            
+                            // Mise à jour du BACKEND
+                            sh """
+                                echo "=== Mise à jour du backend ==="
+                                cat backend/deployment.yaml
+                                sed -i 's|gdaratmohamed/backend-ai:.*|gdaratmohamed/backend-ai:${DOCKERTAG}|g' backend/deployment.yaml
+                                echo "=== Après modification ==="
+                                cat backend/deployment.yaml
+                            """
+                            
+                            // Commit et push
+                            sh """
+                                git add frontend/deployment.yaml backend/deployment.yaml
+                                git commit -m "Updated image tags to ${env.DOCKERTAG} [Jenkins Build ${env.BUILD_NUMBER}]"
+                                git push https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/${GIT_USERNAME}/Argocd-Dromups-sys-project-config.git HEAD:main
+                            """
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Les tags d\'images ont été mis à jour avec succès!'
+        }
+        failure {
+            echo 'Échec de la mise à jour des tags d\'images!'
+        }
+    }
+}
