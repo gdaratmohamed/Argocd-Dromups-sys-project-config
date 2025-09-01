@@ -10,7 +10,7 @@ spec:
   source:
       repoURL: https://github.com/gdaratmohamed/Argocd-Dromups-sys-project-config.git
       targetRevision: main
-      path: Argocd-Dromups-sys-project-config
+      path: /
 
       
   destination: 
