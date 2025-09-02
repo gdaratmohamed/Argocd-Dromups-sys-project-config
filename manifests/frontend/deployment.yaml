@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: default
+  labels:
+    app: frontend
+spec:
+  replicas: 2 # Number of pod replicas for scalability
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: gdaratmohamed/front-image:latest  
+        ports:
+        - containerPort: 80 # Port your frontend app listens on 
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m" # 0.25 CPU cores
+          limits:
+            memory: "256Mi"
+            cpu: "500m" # 0.5 CPU cores
+        env:
+        - name: API_URL # Backend API URL for frontend to communicate
+          value: "http://backend-service:5000" # Refers to backend service
+
+
+
+
+
+
+
+
+
+
+
+
+
+            

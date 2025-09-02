@@ -8,6 +8,6 @@ spec:
     app: frontend
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: 80
-  type: LoadBalancer
+    port: 80 # Service port
+    targetPort: 80 # Pod port
+  type: LoadBalancer # Exposes service externally
