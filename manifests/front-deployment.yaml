@@ -29,7 +29,7 @@ spec:
             cpu: "500m" # 0.5 CPU cores
         env:
         - name: API_URL # Backend API URL for frontend to communicate
-          value: "http://backend-service:5000" # Refers to backend service
+          value: "http://backend-service:8080" # Refers to backend service
 
 
 

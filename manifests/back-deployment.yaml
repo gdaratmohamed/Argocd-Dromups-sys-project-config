@@ -17,9 +17,9 @@ spec:
     spec:
       containers:
       - name: backend
-        image: gdaratmohamed/backend-ai:latest 
+        image: gdaratmohamed/backend-ai:41
         ports:
-        - containerPort: 5000 # Port your backend listens on (e.g., Flask/FastAPI)
+        - containerPort: 8080 # Port backend listens on 
         resources:
           requests:
             memory: "256Mi"

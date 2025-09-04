@@ -4,10 +4,13 @@ metadata:
   name: frontend-service
   namespace: default
 spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+      nodePort: 31000
   selector:
     app: frontend
-  ports:
-  - protocol: TCP
-    port: 80 # Service port
-    targetPort: 80 # Pod port
-  type: LoadBalancer # Exposes service externally
+  status:
+    loadBalancer: {}

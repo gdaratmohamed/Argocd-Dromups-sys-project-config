@@ -8,6 +8,6 @@ spec:
     app: backend
   ports:
   - protocol: TCP
-    port: 5000 # Service port
-    targetPort: 5000 # Pod port
+    port: 8080 # Service port
+    targetPort: 8080 # Pod port
   type: ClusterIP # Internal service
