@@ -55,6 +55,7 @@ pipeline {
                             sh """
                                 git add manifests/front-deployment.yaml manifests/back-deployment.yaml
                                 git commit -m "Updated image tags to ${DOCKERTAG} [Jenkins Build ${env.BUILD_NUMBER}]" || echo "No changes to commit"
+                                echo "Pushing to: https://${GIT_USERNAME}:****@github.com/${GIT_USERNAME}/Argocd-Dromups-sys-project-config.git"
                                 git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/Argocd-Dromups-sys-project-config.git HEAD:main
                             """
                         }
