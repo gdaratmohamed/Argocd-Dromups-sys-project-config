@@ -1,7 +1,6 @@
 pipeline {
     agent any
 
-
     stages {
         stage('Clone repository') {
             steps {
@@ -14,8 +13,22 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                            // Debug username
+                            sh """
+                                echo "GitHub Username: ${GIT_USERNAME}"
+                            """
+
+                            // Validate DOCKERTAG
+                            sh """
+                                if [ -z "${DOCKERTAG}" ]; then
+                                    echo "Error: DOCKERTAG is not defined"
+                                    exit 1
+                                fi
+                            """
+
                             // Configure Git
                             sh """
+                                set -x
                                 git config user.email gdaratmohamed73@gmail.com
                                 git config user.name gdaratmohamed
                             """
@@ -24,7 +37,7 @@ pipeline {
                             sh """
                                 echo "=== Mise à jour du frontend ==="
                                 cat manifests/front-deployment.yaml
-                                sed -i 's|gdaratmohamed/front-image:.*|gdaratmohamed/front-image:${DOCKERTAG}|g' manifests/front-deployment.yaml
+                                sed -i 's|gdaratmohamed/front-image:[^ ]*|gdaratmohamed/front-image:${DOCKERTAG}|g' manifests/front-deployment.yaml
                                 echo "=== Après modification ==="
                                 cat manifests/front-deployment.yaml
                             """
@@ -33,7 +46,7 @@ pipeline {
                             sh """
                                 echo "=== Mise à jour du backend ==="
                                 cat manifests/back-deployment.yaml
-                                sed -i 's|gdaratmohamed/backend-ai:.*|gdaratmohamed/backend-ai:${DOCKERTAG}|g' manifests/back-deployment.yaml
+                                sed -i 's|gdaratmohamed/backend-ai:[^ ]*|gdaratmohamed/backend-ai:${DOCKERTAG}|g' manifests/back-deployment.yaml
                                 echo "=== Après modification ==="
                                 cat manifests/back-deployment.yaml
                             """
