@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: gdaratmohamed/backend-ai:54
+        image: gdaratmohamed/backend-ai:55
         ports:
         - containerPort: 8080 # Port backend listens on 
         resources:

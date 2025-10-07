@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: gdaratmohamed/front-image:54  
+        image: gdaratmohamed/front-image:55  
         ports:
         - containerPort: 80 # Port your frontend app listens on 
         resources:
